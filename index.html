@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SYS::ITOT — Engineering Profile</title>
+<style>
+:root{
+--bg:#020508;--panel:#071016e8;--panel2:#0a151ce8;--text:#efffff;--muted:#789198;
+--c:#24e6d0;--b:#55aaff;--g:#7af3a4;--a:#ffc267;--r:#ff6d7d;--line:#24e6d01f;
+--shadow:0 30px 100px #0009
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden}
+#fx{position:fixed;inset:0;z-index:-5}.gridbg{position:fixed;inset:0;z-index:-4;opacity:.11;background-image:linear-gradient(#24e6d025 1px,transparent 1px),linear-gradient(90deg,#24e6d025 1px,transparent 1px);background-size:58px 58px;mask-image:linear-gradient(#000,transparent 88%)}
+.scan{position:fixed;z-index:40;top:-3px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 20px var(--c);animation:scan 7s linear infinite;pointer-events:none}@keyframes scan{to{top:100%}}
+::selection{background:#24e6d033;color:#fff}
+nav{position:fixed;z-index:30;top:0;left:0;right:0;background:#020609b8;backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
+.nav{max-width:1280px;margin:auto;height:58px;padding:0 20px;display:flex;align-items:center;gap:24px}.brand{font:800 12px ui-monospace,monospace;letter-spacing:1.4px;white-space:nowrap}.brand em{font-style:normal;color:var(--c)}
+.navlinks{display:flex;gap:2px;flex:1;justify-content:center}.navlinks a{font:700 10px ui-monospace,monospace;color:#688087;text-decoration:none;padding:9px 10px;border-radius:7px}.navlinks a:hover,.navlinks a.active{color:#dffffb;background:#24e6d00b}
+.live{font:9px ui-monospace,monospace;color:#789198;display:flex;align-items:center;gap:7px}.led{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 12px var(--g)}
+.wrap{width:min(1280px,100%);margin:auto}.hero{min-height:100vh;padding:115px 20px 70px;display:grid;align-items:center}.heroGrid{display:grid;grid-template-columns:1.08fr .92fr;gap:70px;align-items:center}
+.kicker{font:800 10px ui-monospace,monospace;letter-spacing:2.8px;color:var(--c);margin-bottom:22px}
+h1{font-size:clamp(54px,7.5vw,105px);line-height:.86;letter-spacing:-6px;margin:0 0 25px;font-weight:950}.grad{background:linear-gradient(105deg,#fff 5%,#bffff7 48%,#62adff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h2{font-size:21px;line-height:1.5;font-weight:500;color:#bfd3d7;margin:0;max-width:760px}.hero p{font-size:16px;color:var(--muted);line-height:1.8;max-width:730px}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:28px}.btn,button{font:800 11px ui-monospace,monospace;padding:12px 15px;border-radius:8px;border:1px solid #24e6d05c;background:linear-gradient(135deg,var(--c),#a4f8ec);color:#02100e;text-decoration:none;cursor:pointer;transition:.2s}.btn:hover,button:hover{transform:translateY(-2px);filter:brightness(1.08)}.ghost{background:#ffffff05;color:#d5e8ea;border-color:var(--line)}
+.hud{border:1px solid var(--line);border-radius:19px;background:linear-gradient(145deg,#0b1820ed,#03090df0);box-shadow:var(--shadow);overflow:hidden;position:relative}.hud:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#24e6d00b,transparent 45%,#55aaff08);pointer-events:none}
+.hTop{height:39px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:7px;padding:0 14px}.hd{width:7px;height:7px;border-radius:50%;background:#3d5057}.hd.on{background:var(--g);box-shadow:0 0 10px var(--g)}.file{margin-left:auto;font:9px ui-monospace;color:#516970}.hudBody{padding:24px}
+.avatar{width:105px;height:105px;border-radius:50%;margin:0 auto 17px;border:1px solid #24e6d05c;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle,#24e6d018,transparent 65%),#071117}.avatar img{display:none;width:100%;height:100%;object-fit:cover}.ph{font:9px ui-monospace;color:#567078;text-align:center}
+.term{font:11px/2.05 ui-monospace,monospace;color:#6d878e}.key{color:var(--c)}.val{color:#dcffff}.ok{color:var(--g)}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:18px}.read{padding:11px;border:1px solid #ffffff0d;border-radius:8px;background:#ffffff03}.read b{display:block;font-size:16px}.read span{font:8px ui-monospace;color:#61777e;text-transform:uppercase}
+section{padding:100px 20px}.secHead{margin-bottom:30px}.code{font:800 10px ui-monospace;color:var(--c);letter-spacing:2px}.title{font-size:40px;letter-spacing:-2px;margin:6px 0}.sub{color:var(--muted);max-width:720px;line-height:1.7;margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#09151be8,#040b10d9);padding:24px;box-shadow:0 20px 70px #0004}.card h3{font-size:16px;margin:0 0 10px}.card p{color:var(--muted);line-height:1.75;margin:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.stat{padding:15px;border:1px solid var(--line);border-radius:10px;background:#24e6d006}.stat b{font-size:19px}.stat span{display:block;font:8px ui-monospace;color:#60767d;margin-top:4px}
+.timeline{display:grid;gap:10px}.job{display:grid;grid-template-columns:150px 1fr;gap:22px}.date{font:800 10px ui-monospace;color:var(--c)}.job h3{margin:0 0 4px}.company{font-size:12px;color:#a9c1c5}.job p{margin-top:10px!important}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}.tag{font:9px ui-monospace;color:#a7c5c9;border:1px solid var(--line);background:#24e6d006;padding:6px 8px;border-radius:5px}
+.arch{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.node{padding:18px;border:1px solid var(--line);border-radius:12px;background:#071116e8;min-height:140px;position:relative;transition:.25s}.node:hover{transform:translateY(-4px);border-color:#24e6d04d;box-shadow:0 18px 45px #0007}.node:not(:last-child):after{content:"›";position:absolute;right:-9px;top:50%;color:var(--c);font:22px ui-monospace;z-index:2}.num{font:800 9px ui-monospace;color:#55727a}.node b{display:block;margin:14px 0 5px}.node span{font-size:10px;color:var(--muted);line-height:1.55}
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.skill{padding:16px;border:1px solid var(--line);border-radius:11px;background:#ffffff02}.skill b{font-size:12px}.bar{height:3px;background:#13262d;border-radius:99px;margin-top:12px;overflow:hidden}.bar i{display:block;width:var(--w);height:100%;background:linear-gradient(90deg,var(--c),var(--b));box-shadow:0 0 10px #24e6d044}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.project{padding:0;overflow:hidden;cursor:pointer;transition:.25s}.project:hover{transform:translateY(-5px);border-color:#24e6d044}.pTop{height:85px;background:linear-gradient(135deg,#0c2729,#07131c);position:relative;overflow:hidden}.pTop:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 7px,#24e6d008 8px)}.pIcon{position:absolute;left:18px;bottom:15px;font:800 11px ui-monospace;color:var(--c)}.pBody{padding:19px}.pBody h3{margin:0 0 7px}.pBody p{font-size:12px}.modal{position:fixed;inset:0;z-index:70;display:none;place-items:center;background:#000b;backdrop-filter:blur(12px);padding:20px}.modal.open{display:grid}.modalBox{width:min(720px,100%);max-height:85vh;overflow:auto;border:1px solid #24e6d033;border-radius:16px;background:#061017f5;box-shadow:0 40px 120px #000}.mHead{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.close{background:none;color:#8da4a9;border:0;font-size:20px;padding:0}.mBody{padding:24px}.mBody p{color:var(--muted);line-height:1.8}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:12px}.contactItem{padding:14px 0;border-bottom:1px solid var(--line)}.contactItem:last-child{border:0}.contactItem small{display:block;font:8px ui-monospace;color:#577078;letter-spacing:1.5px;margin-bottom:4px}.contactItem a{color:#dcffff;text-decoration:none}
+footer{text-align:center;border-top:1px solid var(--line);padding:38px 20px;color:#516870;font:9px ui-monospace}
+.editor{position:fixed;right:17px;bottom:17px;z-index:80}.editor details{border:1px solid var(--line);border-radius:11px;background:#030a0ef7;box-shadow:0 25px 80px #0009;backdrop-filter:blur(20px)}summary{cursor:pointer;padding:10px 13px;font:800 10px ui-monospace}.form{width:min(390px,calc(100vw - 38px));max-height:75vh;overflow:auto;padding:13px}.form label{display:block;font:8px ui-monospace;color:#698087;letter-spacing:1px;margin:11px 0 5px}.form input,.form textarea{width:100%;background:#ffffff05;border:1px solid var(--line);border-radius:7px;color:#fff;padding:9px}.form textarea{min-height:75px;resize:vertical}.form button{width:100%;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;z-index:100;padding:10px 14px;border:1px solid #24e6d044;border-radius:8px;background:#061318f5;color:#cffff8;font:10px ui-monospace;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+#cmd{position:fixed;inset:0;z-index:90;display:none;place-items:start center;padding-top:14vh;background:#000b;backdrop-filter:blur(12px)}#cmd.open{display:grid}.cmdBox{width:min(600px,calc(100% - 30px));border:1px solid var(--line);border-radius:13px;background:#061017f7;box-shadow:0 40px 120px #000}.cmdInput{width:100%;padding:17px;border:0;border-bottom:1px solid var(--line);outline:0;background:transparent;color:#fff;font:14px ui-monospace}.cmdList button{width:100%;border:0;border-radius:0;background:transparent;color:#9ab3b8;text-align:left;padding:13px 17px}.cmdList button:hover{background:#24e6d009;color:#fff}
+@media(max-width:900px){.navlinks{display:none}.heroGrid,.grid2,.contact{grid-template-columns:1fr}.arch{grid-template-columns:1fr 1fr}.node:not(:last-child):after{display:none}.stack,.projects{grid-template-columns:1fr 1fr}.job{grid-template-columns:1fr}h1{letter-spacing:-4px}}
+@media(max-width:540px){.hero{padding-left:16px;padding-right:16px}.stats,.stack,.projects,.arch,.readout{grid-template-columns:1fr}section{padding:75px 16px}.title{font-size:32px}}
+@media print{nav,.editor,.actions,#fx,.gridbg,.scan,.modal,#cmd,.toast{display:none!important}body{background:#fff;color:#111}.hero{min-height:auto;padding:30px 20px}.grad{background:none;color:#111}section{padding:25px 20px}.card,.hud,.node,.skill,.project{background:#fff;color:#111;border-color:#aaa;box-shadow:none}.card p,.sub,.hero p{color:#444}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas><div class="gridbg"></div><div class="scan"></div>
+
+<nav><div class="nav">
+ <div class="brand">SYS::<em>ITOT</em> // ENGINEERING</div>
+ <div class="navlinks"><a href="#profil">PROFILE</a><a href="#erfarenhet">EXPERIENCE</a><a href="#arkitektur">ARCH</a><a href="#projekt">PROJECTS</a><a href="#stack">STACK</a><a href="#kontakt">CONTACT</a></div>
+ <div class="live"><span class="led"></span>ONLINE</div>
+</div></nav>
+
+<header class="hero"><div class="wrap heroGrid">
+ <div>
+  <div class="kicker">IT / OT · INDUSTRIAL DIGITALIZATION · SYSTEMS ENGINEERING</div>
+  <h1><span class="grad" id="nameHero">Ditt Namn</span></h1>
+  <h2 id="headline">IT/OT-specialist · Infrastruktur · Industriell IT · Digitalisering</h2>
+  <p id="intro">En professionell presentation av din erfarenhet, tekniska kompetens och förmåga att koppla ihop människor, system och industri.</p>
+  <div class="actions"><a class="btn" href="#projekt">EXPLORE PROJECTS ↓</a><button class="ghost" onclick="openCmd()">⌘ COMMAND</button><button class="ghost" onclick="window.print()">EXPORT PDF</button></div>
+ </div>
+ <div class="hud">
+  <div class="hTop"><span class="hd on"></span><span class="hd"></span><span class="hd"></span><span class="file">identity_node.sys</span></div>
+  <div class="hudBody">
+   <div class="avatar"><img id="photo" alt="Profilbild"><div class="ph" id="photoPlaceholder">PROFILE<br>IMAGE</div></div>
+   <div class="term">
+    <div><span class="key">identity</span> : <span class="val" id="termName">"Ditt Namn"</span></div>
+    <div><span class="key">domain</span> : <span class="val">"IT / OT / INDUSTRY"</span></div>
+    <div><span class="key">architecture</span> : <span class="ok">"INTEGRATED"</span></div>
+    <div><span class="key">focus</span> : <span class="val">"AUTOMATE · SECURE"</span></div>
+    <div><span class="key">state</span> : <span class="ok">"OPERATIONAL"</span></div>
+   </div>
+   <div class="readout"><div class="read"><b>IT</b><span>Infrastructure</span></div><div class="read"><b>OT</b><span>Industrial</span></div><div class="read"><b>DATA</b><span>Integration</span></div></div>
+  </div>
+ </div>
+</div></header>
+
+<section id="profil"><div class="wrap">
+ <div class="secHead"><div class="code">01 // PROFILE</div><h2 class="title">Teknik som fungerar i verkligheten.</h2><p class="sub">En digital profil som visar både tekniskt djup och verksamhetsförståelse.</p></div>
+ <div class="grid2"><div class="card"><h3>Om mig</h3><p id="aboutText">Beskriv din bakgrund, personlighet, arbetsstil och vad du brinner för.</p></div><div class="card"><h3>Mitt värde</h3><p id="valueText">Beskriv hur du skapar värde genom struktur, problemlösning, tekniskt djup och förståelse för verksamheten.</p></div></div>
+ <div class="stats"><div class="stat"><b>IT</b><span>INFRASTRUCTURE</span></div><div class="stat"><b>OT</b><span>INDUSTRIAL SYSTEMS</span></div><div class="stat"><b>DATA</b><span>INTEGRATION</span></div><div class="stat"><b>DEV</b><span>AUTOMATION</span></div></div>
+</div></section>
+
+<section id="erfarenhet"><div class="wrap">
+ <div class="secHead"><div class="code">02 // EXPERIENCE</div><h2 class="title">Erfarenhet</h2><p class="sub">Ansvar, projekt och resultat presenterade som en teknisk historik.</p></div>
+ <div class="timeline">
+  <div class="card job"><div class="date">2024 — NOW</div><div><h3>Din nuvarande roll</h3><div class="company">Företag / organisation</div><p>Beskriv systemansvar, projekt, förbättringar och konkreta resultat.</p><div class="tags"><span class="tag">IT</span><span class="tag">OT</span><span class="tag">MES</span><span class="tag">AUTOMATION</span></div></div></div>
+  <div class="card job"><div class="date">2020 — 2024</div><div><h3>Tidigare roll</h3><div class="company">Tidigare företag</div><p>Beskriv tidigare erfarenhet och vad du byggde upp, effektiviserade eller ansvarade för.</p><div class="tags"><span class="tag">INFRA</span><span class="tag">NETWORK</span><span class="tag">DATA</span></div></div></div>
+ </div>
+</div></section>
+
+<section id="arkitektur"><div class="wrap">
+ <div class="secHead"><div class="code">03 // SYSTEM ARCHITECTURE</div><h2 class="title">Från maskin till beslut.</h2><p class="sub">En interaktiv översikt över hur du tänker kring IT/OT och dataflöden.</p></div>
+ <div class="arch">
+  <div class="node"><span class="num">01 / FIELD</span><b>Machines</b><span>PLC · Sensors · Drives · Production equipment</span></div>
+  <div class="node"><span class="num">02 / OT</span><b>Control</b><span>OPC · SCADA · Ignition · Alarms · Recipes</span></div>
+  <div class="node"><span class="num">03 / DATA</span><b>Integration</b><span>MQTT · Sparkplug · SQL · APIs · UNS</span></div>
+  <div class="node"><span class="num">04 / IT</span><b>Business</b><span>MES · ERP · Power BI · Analytics</span></div>
+  <div class="node"><span class="num">05 / VALUE</span><b>Decisions</b><span>OEE · Quality · Optimization · Continuous improvement</span></div>
+ </div>
+</div></section>
+
+<section id="projekt"><div class="wrap">
+ <div class="secHead"><div class="code">04 // PROJECT LAB</div><h2 class="title">Projekt som visar vad jag kan.</h2><p class="sub">Klicka på ett projekt för att öppna en teknisk case-vy. Byt innehållet till dina riktiga projekt.</p></div>
+ <div class="projects">
+  <article class="card project" onclick="openProject('MES / OT Integration','Koppla ihop produktion, maskindata och verksamhet med ett stabilt dataflöde.','OPC · MQTT · Sparkplug · SQL · Ignition','Problem → datainsamling → normalisering → visualisering → verksamhetsnytta.')"><div class="pTop"><span class="pIcon">CASE_001 // MES</span></div><div class="pBody"><h3>MES / OT Integration</h3><p>Maskindata → produktion → insikt.</p><div class="tags"><span class="tag">OT</span><span class="tag">DATA</span></div></div></article>
+  <article class="card project" onclick="openProject('Modern IT Device Management','Centraliserad hantering av Windows, iOS, Android och företagets klientmiljö.','Microsoft Intune · Entra ID · Graph · PowerShell','Standardisering → policy → deployment → compliance → automation.')"><div class="pTop"><span class="pIcon">CASE_002 // IT</span></div><div class="pBody"><h3>Device Management</h3><p>Policy, säkerhet och automation.</p><div class="tags"><span class="tag">INTUNE</span><span class="tag">AUTOMATION</span></div></div></article>
+  <article class="card project" onclick="openProject('Industrial Data Platform','Göra produktionsdata användbar för OEE, analys och beslut.','SQL · MQTT · Sparkplug · Power BI · APIs','Collect → contextualize → store → visualize → optimize.')"><div class="pTop"><span class="pIcon">CASE_003 // DATA</span></div><div class="pBody"><h3>Industrial Data</h3><p>Rådata → beslutskraft.</p><div class="tags"><span class="tag">SQL</span><span class="tag">BI</span></div></div></article>
+ </div>
+</div></section>
+
+<section id="stack"><div class="wrap">
+ <div class="secHead"><div class="code">05 // TECHNOLOGY STACK</div><h2 class="title">Teknisk stack.</h2><p class="sub">Exempel på kompetenser — justera nivåerna efter dig.</p></div>
+ <div class="stack">
+  <div class="skill"><b>IT Infrastructure</b><div class="bar"><i style="--w:92%"></i></div></div><div class="skill"><b>Microsoft / Intune</b><div class="bar"><i style="--w:88%"></i></div></div><div class="skill"><b>Networking</b><div class="bar"><i style="--w:90%"></i></div></div>
+  <div class="skill"><b>MES / SCADA</b><div class="bar"><i style="--w:94%"></i></div></div><div class="skill"><b>Ignition / OPC</b><div class="bar"><i style="--w:91%"></i></div></div><div class="skill"><b>SQL / Data</b><div class="bar"><i style="--w:87%"></i></div></div>
+  <div class="skill"><b>PowerShell / Automation</b><div class="bar"><i style="--w:84%"></i></div></div><div class="skill"><b>Power BI / Analytics</b><div class="bar"><i style="--w:82%"></i></div></div><div class="skill"><b>MQTT / Sparkplug / UNS</b><div class="bar"><i style="--w:86%"></i></div></div>
+ </div>
+</div></section>
+
+<section id="kontakt"><div class="wrap">
+ <div class="secHead"><div class="code">06 // CONTACT</div><h2 class="title">Open communication channel.</h2><p class="sub">Gör nästa steg enkelt.</p></div>
+ <div class="contact"><div class="card"><div class="contactItem"><small>EMAIL</small><a id="email" href="mailto:din@email.se">din@email.se</a></div><div class="contactItem"><small>PHONE</small><span id="phone">070-000 00 00</span></div><div class="contactItem"><small>LOCATION</small><span id="location">Sverige</span></div></div>
+ <div class="card"><h3>LinkedIn</h3><p>Din LinkedIn-profil kan vara den publika ytan medan denna sida ger den tekniska fördjupningen.</p><div class="actions"><a id="linkedin" class="btn" href="#" target="_blank">OPEN LINKEDIN →</a></div></div></div>
+</div></section>
+
+<footer>© <span id="year"></span> <span id="footerName">Ditt Namn</span> · SYS::ITOT // ENGINEERING PROFILE</footer>
+
+<div class="editor"><details><summary>✎ EDIT PROFILE</summary><div class="form">
+<label>Namn</label><input id="fName" value="Ditt Namn"><label>Yrkesrubrik</label><input id="fHeadline" value="IT/OT-specialist · Infrastruktur · Industriell IT · Digitalisering">
+<label>Intro</label><textarea id="fIntro">En professionell presentation av din erfarenhet, tekniska kompetens och förmåga att koppla ihop människor, system och industri.</textarea>
+<label>Om mig</label><textarea id="fAbout">Beskriv din bakgrund, personlighet, arbetsstil och vad du brinner för.</textarea><label>Mitt värde</label><textarea id="fValue">Beskriv hur du skapar värde genom struktur, problemlösning, tekniskt djup och förståelse för verksamheten.</textarea>
+<label>E-post</label><input id="fEmail" value="din@email.se"><label>Telefon</label><input id="fPhone" value="070-000 00 00"><label>Plats</label><input id="fLocation" value="Sverige"><label>LinkedIn</label><input id="fLinkedin" placeholder="https://www.linkedin.com/in/dittnamn"><label>Profilbild</label><input id="fPhoto" type="file" accept="image/*">
+<button onclick="saveProfile()">SAVE CONFIGURATION</button></div></details></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalBox"><div class="mHead"><b id="mTitle">PROJECT</b><button class="close" onclick="closeModal()">×</button></div><div class="mBody"><div class="code">TECHNICAL CASE</div><h2 id="mHead"></h2><p id="mDesc"></p><div class="tags" id="mTags"></div><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p id="mFlow"></p></div></div></div>
+
+<div id="cmd"><div class="cmdBox"><input id="cmdInput" class="cmdInput" placeholder="Type a command…"><div class="cmdList">
+<button onclick="go('profil')">→ Open PROFILE</button><button onclick="go('erfarenhet')">→ Open EXPERIENCE</button><button onclick="go('arkitektur')">→ Open ARCHITECTURE</button><button onclick="go('projekt')">→ Open PROJECT LAB</button><button onclick="go('stack')">→ Open TECHNOLOGY STACK</button><button onclick="go('kontakt')">→ Open CONTACT</button></div></div></div>
+<div class="toast" id="toast">CONFIGURATION SAVED</div>
+
+<script>
+const ids=["Name","Headline","Intro","About","Value","Email","Phone","Location","Linkedin"];
+function saveProfile(){
+ const p={};ids.forEach(x=>p[x]=document.getElementById("f"+x).value);localStorage.profile=JSON.stringify(p);apply();
+ const f=document.getElementById("fPhoto").files[0];if(f){const r=new FileReader();r.onload=()=>{localStorage.photo=r.result;applyPhoto()};r.readAsDataURL(f)}
+ const t=document.getElementById("toast");t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)
+}
+function apply(){
+ let p={};try{p=JSON.parse(localStorage.profile||"{}")}catch(e){}
+ ids.forEach(x=>{if(p[x]!=null)document.getElementById("f"+x).value=p[x]});
+ const g=id=>document.getElementById(id),s=(id,v)=>g(id).textContent=v,n=g("fName").value;
+ s("nameHero",n);s("termName",'"'+n+'"');s("footerName",n);s("headline",g("fHeadline").value);s("intro",g("fIntro").value);s("aboutText",g("fAbout").value);s("valueText",g("fValue").value);
+ const e=g("fEmail").value;s("email",e);g("email").href="mailto:"+e;s("phone",g("fPhone").value);s("location",g("fLocation").value);g("linkedin").href=g("fLinkedin").value||"#"
+}
+function applyPhoto(){const p=localStorage.photo;if(p){document.getElementById("photo").src=p;document.getElementById("photo").style.display="block";document.getElementById("photoPlaceholder").style.display="none"}}
+function openProject(title,desc,tags,flow){document.getElementById("mTitle").textContent=title.toUpperCase();document.getElementById("mHead").textContent=title;document.getElementById("mDesc").textContent=desc;document.getElementById("mFlow").textContent=flow;document.getElementById("mTags").innerHTML=tags.split(" · ").map(x=>`<span class="tag">${x}</span>`).join("");document.getElementById("modal").classList.add("open")}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function openCmd(){document.getElementById("cmd").classList.add("open");document.getElementById("cmdInput").focus()}
+function closeCmd(){document.getElementById("cmd").classList.remove("open")}
+function go(id){closeCmd();document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openCmd()}if(e.key==="Escape"){closeCmd();closeModal()}})
+document.getElementById("cmdInput").addEventListener("keydown",e=>{if(e.key==="Enter"){let q=e.target.value.toLowerCase();let m=[["profil","profil"],["experience","erfarenhet"],["arch","arkitektur"],["project","projekt"],["stack","stack"],["contact","kontakt"]];let x=m.find(a=>q.includes(a[0]));if(x)go(x[1])}})
+document.getElementById("year").textContent=new Date().getFullYear();apply();applyPhoto();
+
+const c=document.getElementById("fx"),x=c.getContext("2d");let P=[];
+function resize(){c.width=innerWidth;c.height=innerHeight;P=Array.from({length:Math.min(90,Math.floor(innerWidth/14))},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.3+.25}))}
+function anim(){x.clearRect(0,0,c.width,c.height);for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle="#24e6d080";x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){let a=P[i],b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<105){x.strokeStyle=`rgba(36,230,208,${(1-d/105)*.08})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}requestAnimationFrame(anim)}
+addEventListener("resize",resize);resize();anim();
+const sec=[...document.querySelectorAll("section[id]")],ln=[...document.querySelectorAll(".navlinks a")];addEventListener("scroll",()=>{let y=scrollY+150,id=sec.find(s=>y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight)?.id;ln.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+id))});
+</script>
+</body>
+</html>
