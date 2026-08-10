@@ -130,13 +130,6 @@ footer{text-align:center;border-top:1px solid var(--line);padding:38px 20px;colo
 
 <footer>© <span id="year"></span> <span id="footerName">Ditt Namn</span> · SYS::ITOT // ENGINEERING PROFILE</footer>
 
-<div class="editor"><details><summary>✎ EDIT PROFILE</summary><div class="form">
-<label>Namn</label><input id="fName" value="Ditt Namn"><label>Yrkesrubrik</label><input id="fHeadline" value="IT/OT-specialist · Infrastruktur · Industriell IT · Digitalisering">
-<label>Intro</label><textarea id="fIntro">En professionell presentation av din erfarenhet, tekniska kompetens och förmåga att koppla ihop människor, system och industri.</textarea>
-<label>Om mig</label><textarea id="fAbout">Beskriv din bakgrund, personlighet, arbetsstil och vad du brinner för.</textarea><label>Mitt värde</label><textarea id="fValue">Beskriv hur du skapar värde genom struktur, problemlösning, tekniskt djup och förståelse för verksamheten.</textarea>
-<label>E-post</label><input id="fEmail" value="din@email.se"><label>Telefon</label><input id="fPhone" value="070-000 00 00"><label>Plats</label><input id="fLocation" value="Sverige"><label>LinkedIn</label><input id="fLinkedin" placeholder="https://www.linkedin.com/in/dittnamn"><label>Profilbild</label><input id="fPhoto" type="file" accept="image/*">
-<button onclick="saveProfile()">SAVE CONFIGURATION</button></div></details></div>
-
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalBox"><div class="mHead"><b id="mTitle">PROJECT</b><button class="close" onclick="closeModal()">×</button></div><div class="mBody"><div class="code">TECHNICAL CASE</div><h2 id="mHead"></h2><p id="mDesc"></p><div class="tags" id="mTags"></div><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p id="mFlow"></p></div></div></div>
 
 <div id="cmd"><div class="cmdBox"><input id="cmdInput" class="cmdInput" placeholder="Type a command…"><div class="cmdList">
@@ -145,11 +138,6 @@ footer{text-align:center;border-top:1px solid var(--line);padding:38px 20px;colo
 
 <script>
 const ids=["Name","Headline","Intro","About","Value","Email","Phone","Location","Linkedin"];
-function saveProfile(){
- const p={};ids.forEach(x=>p[x]=document.getElementById("f"+x).value);localStorage.profile=JSON.stringify(p);apply();
- const f=document.getElementById("fPhoto").files[0];if(f){const r=new FileReader();r.onload=()=>{localStorage.photo=r.result;applyPhoto()};r.readAsDataURL(f)}
- const t=document.getElementById("toast");t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)
-}
 function apply(){
  let p={};try{p=JSON.parse(localStorage.profile||"{}")}catch(e){}
  ids.forEach(x=>{if(p[x]!=null)document.getElementById("f"+x).value=p[x]});
