@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tomas – IT/OT Specialist</title>
+<title>Tomas – IT/OT Industrial Tech</title>
 
 <link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -16,13 +16,10 @@
 <header>
     <div class="hero-inner">
         <h1>Tomas</h1>
-        <h2>IT/OT Specialist • Automation • Industriella nätverk • Säkerhet</h2>
+        <h2>IT/OT Technician • PLC • SCADA • MES • OT‑säkerhet</h2>
     </div>
 </header>
 
-<!-- ========================= -->
-<!-- OM MIG – NY DESIGN        -->
-<!-- ========================= -->
 <section class="parallax about-section">
     <div class="about-wrapper">
 
@@ -33,24 +30,18 @@
         <div class="about-text">
             <h3>Om mig</h3>
             <p>
-                Jag är en IT/OT‑tekniker med över två decenniers erfarenhet inom industriell produktion,
-                drift och tekniska system. Sedan 1999 har jag arbetat i samma fabrik — från Cederroth till
-                Orkla Care — och byggt upp en unik kombination av praktisk maskinkunskap, systemägarskap
-                och teknisk problemlösning.
+                IT/OT‑tekniker med över två decenniers erfarenhet inom industriell produktion, drift och tekniska system.
+                Från Cederroth till Orkla Care – med djup förståelse för hur människor, maskiner och system samverkar.
             </p>
             <p>
-                Mitt fokus ligger på att skapa stabila, säkra och effektiva produktionsmiljöer genom att
-                koppla samman OT‑system, MES, PLC/SCADA och IT‑infrastruktur. Jag brinner för att förena
-                teknik och verksamhet — och göra komplexa system enkla att använda.
+                Jag arbetar i gränslandet mellan OT och IT: MES, PLC/SCADA, SAP‑integrationer, SQL‑baserade system och
+                OT‑säkerhet. Fokus ligger på stabil drift, tydliga flöden och lösningar som fungerar i verkligheten.
             </p>
         </div>
 
     </div>
 </section>
 
-<!-- ========================= -->
-<!-- ERFARENHET                -->
-<!-- ========================= -->
 <section class="parallax">
     <h3>Erfarenhet</h3>
 
@@ -83,9 +74,6 @@
     </p>
 </section>
 
-<!-- ========================= -->
-<!-- KOMPETENSER               -->
-<!-- ========================= -->
 <section class="parallax">
     <h3>Kompetenser</h3>
     <div class="skills">
@@ -138,9 +126,6 @@
     </div>
 </section>
 
-<!-- ========================= -->
-<!-- PROJEKT                   -->
-<!-- ========================= -->
 <section class="parallax">
     <h3>Projekt</h3>
     <div class="projects">
@@ -166,18 +151,12 @@
     </div>
 </section>
 
-<!-- ========================= -->
-<!-- CERTIFIERINGAR            -->
-<!-- ========================= -->
 <section class="parallax">
     <h3>Certifieringar</h3>
     <p><strong>Microsoft Intune – Managing Windows 11</strong> (Cornerstone, 2025)</p>
     <p>Totalt 33 certifieringar.</p>
 </section>
 
-<!-- ========================= -->
-<!-- KONTAKT                   -->
-<!-- ========================= -->
 <section class="parallax">
     <h3>Kontakt</h3>
     <p>
@@ -186,12 +165,9 @@
 </section>
 
 <footer>
-    © 2026 Tomas – Personlig IT/OT‑webbsida
+    © 2026 Tomas – Industrial IT/OT‑portfolio
 </footer>
 
-<!-- ========================= -->
-<!-- MODAL                     -->
-<!-- ========================= -->
 <div class="modal-bg" id="modal-bg">
     <div class="modal" id="modal">
         <h3 id="modal-title"></h3>
@@ -200,11 +176,7 @@
     </div>
 </div>
 
-<!-- ========================= -->
-<!-- JAVASCRIPT                -->
-<!-- ========================= -->
 <script>
-/* === THREE.JS BACKGROUND === */
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
 
@@ -214,18 +186,18 @@ camera.position.z = 4;
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-/* === 3D T‑LOGGA === */
+/* 3D T‑logga – metallblock */
 const logoGroup = new THREE.Group();
 
 const verticalGeom = new THREE.BoxGeometry(0.4, 1.4, 0.4);
 const horizontalGeom = new THREE.BoxGeometry(1.2, 0.35, 0.4);
 
 const logoMaterial = new THREE.MeshStandardMaterial({
-    color: 0x00e0ff,
-    emissive: 0x0040ff,
-    emissiveIntensity: 0.8,
-    metalness: 0.9,
-    roughness: 0.3
+    color: 0xff8800,
+    emissive: 0x552200,
+    emissiveIntensity: 0.9,
+    metalness: 1.0,
+    roughness: 0.25
 });
 
 const verticalBar = new THREE.Mesh(verticalGeom, logoMaterial);
@@ -240,21 +212,21 @@ logoGroup.add(horizontalBar);
 logoGroup.position.set(-1.8, 0.6, 0);
 scene.add(logoGroup);
 
-/* === Sphere === */
+/* Sfär – processnod */
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(1.6, 64, 64),
     new THREE.MeshStandardMaterial({
-        color: 0x5533ff,
-        emissive: 0x2200ff,
-        emissiveIntensity: 0.6,
-        roughness: 0.4,
-        metalness: 0.8
+        color: 0x1f4b8c,
+        emissive: 0x0b1f3a,
+        emissiveIntensity: 0.7,
+        roughness: 0.35,
+        metalness: 0.9
     })
 );
 sphere.position.set(1.8, -0.4, -0.5);
 scene.add(sphere);
 
-/* === Particles === */
+/* Partiklar – industriellt damm */
 const particlesGeometry = new THREE.BufferGeometry();
 const particlesCount = 250;
 const positions = new Float32Array(particlesCount * 3);
@@ -264,11 +236,11 @@ for (let i = 0; i < particlesCount * 3; i++) {
 }
 particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-const particlesMaterial = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.04 });
+const particlesMaterial = new THREE.PointsMaterial({ color: 0xffaa55, size: 0.04 });
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
 
-/* === STARFALL === */
+/* Stjärnfall – gnistor */
 const starGeometry = new THREE.BufferGeometry();
 const starCount = 80;
 const starPositions = new Float32Array(starCount * 3);
@@ -282,28 +254,32 @@ for (let i = 0; i < starCount * 3; i += 3) {
 starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
 
 const starMaterial = new THREE.PointsMaterial({
-    color: 0xffffff,
+    color: 0xffddaa,
     size: 0.06,
     transparent: true,
-    opacity: 0.9
+    opacity: 0.95
 });
 
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
-/* === Lights === */
-scene.add(new THREE.PointLight(0xff00ff, 2, 10).position.set(2, 2, 2));
-scene.add(new THREE.PointLight(0x00aaff, 2, 10).position.set(-2, -2, -2));
+/* Lights */
+const light1 = new THREE.PointLight(0xff8800, 2, 10);
+light1.position.set(2, 2, 2);
+scene.add(light1);
+
+const light2 = new THREE.PointLight(0x1f4b8c, 2, 10);
+light2.position.set(-2, -2, -2);
+scene.add(light2);
+
 scene.add(new THREE.AmbientLight(0xffffff, 0.25));
 
-/* === Mouse follow === */
 const mouse = { x: 0, y: 0 };
 window.addEventListener("mousemove", (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 });
 
-/* === Animate === */
 function animate() {
     requestAnimationFrame(animate);
 
@@ -318,7 +294,6 @@ function animate() {
     particles.position.x = mouse.x * 0.8;
     particles.position.y = mouse.y * 0.6;
 
-    /* STARFALL animation */
     const starPos = starGeometry.attributes.position.array;
     for (let i = 0; i < starCount * 3; i += 3) {
         starPos[i] -= 0.05;
@@ -336,14 +311,12 @@ function animate() {
 }
 animate();
 
-/* === Resize === */
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* === Parallax === */
 const parallaxSections = document.querySelectorAll(".parallax");
 window.addEventListener("scroll", () => {
     const scrollY = window.scrollY;
@@ -353,7 +326,6 @@ window.addEventListener("scroll", () => {
     });
 });
 
-/* === 3D Tilt === */
 document.querySelectorAll(".interactive-card").forEach(card => {
     card.addEventListener("mousemove", (e) => {
         const rect = card.getBoundingClientRect();
@@ -361,7 +333,7 @@ document.querySelectorAll(".interactive-card").forEach(card => {
         const y = e.clientY - rect.top;
 
         const tiltX = ((y / rect.height) - 0.5) * 20;
-        const tiltY = ((x / rect.width) - 0.5) * -20;
+        const tiltY = ((x / rect.width) - rect.width / 2) / rect.width * -40;
 
         card.style.setProperty("--tiltX", tiltX + "deg");
         card.style.setProperty("--tiltY", tiltY + "deg");
@@ -373,10 +345,22 @@ document.querySelectorAll(".interactive-card").forEach(card => {
     });
 });
 
-/* === Modal === */
 const modalBg = document.getElementById("modal-bg");
 const modalTitle = document.getElementById("modal-title");
 const modalText = document.getElementById("modal-text");
 
 document.querySelectorAll(".interactive-card").forEach(card => {
-    card.addEventListener
+    card.addEventListener("click", () => {
+        modalTitle.textContent = card.dataset.title;
+        modalText.textContent = card.dataset.info;
+        modalBg.style.display = "flex";
+    });
+});
+
+function closeModal() {
+    modalBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
