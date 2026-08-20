@@ -41,6 +41,28 @@ footer{text-align:center;border-top:1px solid var(--line);padding:38px 20px;colo
 .editor{position:fixed;right:17px;bottom:17px;z-index:80}.editor details{border:1px solid var(--line);border-radius:11px;background:#030a0ef7;box-shadow:0 25px 80px #0009;backdrop-filter:blur(20px)}summary{cursor:pointer;padding:10px 13px;font:800 10px ui-monospace}.form{width:min(390px,calc(100vw - 38px));max-height:75vh;overflow:auto;padding:13px}.form label{display:block;font:8px ui-monospace;color:#698087;letter-spacing:1px;margin:11px 0 5px}.form input,.form textarea{width:100%;background:#ffffff05;border:1px solid var(--line);border-radius:7px;color:#fff;padding:9px}.form textarea{min-height:75px;resize:vertical}.form button{width:100%;margin-top:12px}
 .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;z-index:100;padding:10px 14px;border:1px solid #24e6d044;border-radius:8px;background:#061318f5;color:#cffff8;font:10px ui-monospace;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
 #cmd{position:fixed;inset:0;z-index:90;display:none;place-items:start center;padding-top:14vh;background:#000b;backdrop-filter:blur(12px)}#cmd.open{display:grid}.cmdBox{width:min(600px,calc(100% - 30px));border:1px solid var(--line);border-radius:13px;background:#061017f7;box-shadow:0 40px 120px #000}.cmdInput{width:100%;padding:17px;border:0;border-bottom:1px solid var(--line);outline:0;background:transparent;color:#fff;font:14px ui-monospace}.cmdList button{width:100%;border:0;border-radius:0;background:transparent;color:#9ab3b8;text-align:left;padding:13px 17px}.cmdList button:hover{background:#24e6d009;color:#fff}
+
+/* ===== INTERACTIVE DETAIL LENS ===== */
+.detail-lens{position:fixed;z-index:95;width:min(370px,calc(100vw - 28px));border:1px solid #24e6d05c;border-radius:14px;background:linear-gradient(145deg,#091820f7,#02090ef7);box-shadow:0 30px 100px #000b,0 0 0 1px #ffffff04 inset;backdrop-filter:blur(22px);pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .18s ease,transform .18s ease;overflow:hidden}
+.detail-lens.open{opacity:1;transform:translateY(0) scale(1)}
+.lens-top{height:32px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 11px;gap:7px;font:8px ui-monospace;color:#668087;letter-spacing:1px}
+.lens-dot{width:5px;height:5px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+#lensClose{display:none;margin-left:auto;background:none;border:0;color:#7d959a;padding:0;font-size:17px}
+.lens-code{font:800 8px ui-monospace;color:var(--c);letter-spacing:1.6px;padding:17px 18px 0}
+.detail-lens h3{font-size:18px;letter-spacing:-.4px;margin:5px 18px 8px}
+.detail-lens p{font-size:11px;line-height:1.75;color:var(--muted);margin:0 18px 14px}
+.lens-tags{display:flex;flex-wrap:wrap;gap:5px;padding:0 18px 17px}
+.lens-tags span{font:8px ui-monospace;color:#b4d5d9;border:1px solid var(--line);border-radius:5px;padding:5px 7px;background:#24e6d005}
+.hoverable{cursor:crosshair;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.hoverable:hover{transform:translateY(-7px) scale(1.025)!important;border-color:#24e6d064!important;box-shadow:0 28px 70px #0009,0 0 35px #24e6d00b!important}
+.node.hoverable:hover{transform:translateY(-8px) scale(1.035)!important}
+.skill.hoverable:hover .bar{height:5px}
+.skill.hoverable:hover .bar i{filter:brightness(1.3);box-shadow:0 0 16px #24e6d077}
+.stat.hoverable:hover{transform:translateY(-5px) scale(1.035)!important}
+.project.hoverable:hover .pTop{filter:brightness(1.15)}
+.project-flow{border:1px solid var(--line);border-radius:9px;background:#24e6d005;padding:14px;font:10px/1.7 ui-monospace;color:#9fc0c5}
+@media(max-width:700px){.detail-lens{pointer-events:auto}#lensClose{display:block}.hoverable:hover{transform:none!important}}
+
 @media(max-width:900px){.navlinks{display:none}.heroGrid,.grid2,.contact{grid-template-columns:1fr}.arch{grid-template-columns:1fr 1fr}.node:not(:last-child):after{display:none}.stack,.projects{grid-template-columns:1fr 1fr}.job{grid-template-columns:1fr}h1{letter-spacing:-4px}}
 @media(max-width:540px){.hero{padding-left:16px;padding-right:16px}.stats,.stack,.projects,.arch,.readout{grid-template-columns:1fr}section{padding:75px 16px}.title{font-size:32px}}
 @media print{nav,.editor,.actions,#fx,.gridbg,.scan,.modal,#cmd,.toast{display:none!important}body{background:#fff;color:#111}.hero{min-height:auto;padding:30px 20px}.grad{background:none;color:#111}section{padding:25px 20px}.card,.hud,.node,.skill,.project{background:#fff;color:#111;border-color:#aaa;box-shadow:none}.card p,.sub,.hero p{color:#444}}
@@ -69,7 +91,14 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;opac
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-<body><div class="progress" id="progress"></div><div class="cursorGlow" id="cursorGlow"></div>
+<body>
+<div id="detailLens" class="detail-lens" aria-hidden="true">
+  <div class="lens-top"><span class="lens-dot"></span><span id="lensType">SYSTEM DETAIL</span><button id="lensClose" aria-label="Stäng">×</button></div>
+  <div class="lens-code" id="lensCode">NODE / 00</div>
+  <h3 id="lensTitle">Technical detail</h3>
+  <p id="lensText"></p>
+  <div class="lens-tags" id="lensTags"></div>
+</div><div class="progress" id="progress"></div><div class="cursorGlow" id="cursorGlow"></div>
 <canvas id="fx"></canvas><div class="gridbg"></div><div class="scan"></div>
 
 <nav><div class="nav">
@@ -105,7 +134,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;opac
 <section id="profil"><div class="wrap"><div class="sectionNumber">01</div>
  <div class="secHead"><div class="code">01 // PROFILE</div><h2 class="title">Teknik som fungerar i verkligheten.</h2><p class="sub">En digital profil som visar både tekniskt djup och verksamhetsförståelse.</p></div>
  <div class="grid2"><div class="card"><h3>Om mig</h3><p id="aboutText">Beskriv din bakgrund, personlighet, arbetsstil och vad du brinner för.</p></div><div class="card"><h3>Mitt värde</h3><p id="valueText">Beskriv hur du skapar värde genom struktur, problemlösning, tekniskt djup och förståelse för verksamheten.</p></div></div>
- <div class="stats"><div class="stat"><b>IT</b><span>INFRASTRUCTURE</span></div><div class="stat"><b>OT</b><span>INDUSTRIAL SYSTEMS</span></div><div class="stat"><b>DATA</b><span>INTEGRATION</span></div><div class="stat"><b>DEV</b><span>AUTOMATION</span></div></div><div class="impact"><div class="card impactMain"><div class="code">ENGINEERING PRINCIPLE</div><h3>Make complex systems feel simple.</h3><p>Teknik ska inte bara fungera — den ska vara begriplig, stabil, säker och skapa verklig nytta för verksamheten.</p><div class="impactLine"></div><div class="impactGrid"><div class="impactMetric"><b>01</b><span>STRUCTURE</span></div><div class="impactMetric"><b>02</b><span>AUTOMATE</span></div><div class="impactMetric"><b>03</b><span>OPTIMIZE</span></div></div></div><div class="card"><div class="code">RUNTIME LOG</div><div class="terminal"><div><span class="p">[INIT]</span> identity_node.sys</div><div><span class="g">[ OK ]</span> network layer</div><div><span class="g">[ OK ]</span> OT integration</div><div><span class="g">[ OK ]</span> data pipeline</div><div><span class="b">[RUN]</span> continuous improvement</div><div class="dim">> waiting for next challenge_</div></div></div></div>
+ <div class="stats"><div class="stat hoverable" data-detail data-type="DOMAIN" data-code="DOMAIN / IT" data-title="IT Infrastructure" data-text="Klienter, identitet, enheter, nätverk och centrala IT-tjänster. En stabil IT-plattform är grunden för både användare och industri." data-tags="Intune|Entra ID|Network|PowerShell"><b>IT</b><span>INFRASTRUCTURE</span></div><div class="stat hoverable" data-detail data-type="DOMAIN" data-code="DOMAIN / OT" data-title="OT & Industrial Systems" data-text="Produktionsnära system där tillgänglighet, determinism och driftsäkerhet är centrala. Kopplar automation till överordnade system." data-tags="SCADA|MES|OPC|PLC"><b>OT</b><span>INDUSTRIAL SYSTEMS</span></div><div class="stat hoverable" data-detail data-type="DOMAIN" data-code="DOMAIN / DATA" data-title="Industrial Data" data-text="Gör maskin- och verksamhetsdata användbar genom integration, strukturering, lagring och visualisering." data-tags="SQL|MQTT|Sparkplug|UNS"><b>DATA</b><span>INTEGRATION</span></div><div class="stat hoverable" data-detail data-type="DOMAIN" data-code="DOMAIN / DEV" data-title="Development & Automation" data-text="Automatisering minskar manuellt arbete och gör IT/OT-miljön mer konsekvent, mätbar och skalbar." data-tags="PowerShell|APIs|Scripts|Automation"><b>DEV</b><span>AUTOMATION</span></div></div><div class="impact"><div class="card impactMain"><div class="code">ENGINEERING PRINCIPLE</div><h3>Make complex systems feel simple.</h3><p>Teknik ska inte bara fungera — den ska vara begriplig, stabil, säker och skapa verklig nytta för verksamheten.</p><div class="impactLine"></div><div class="impactGrid"><div class="impactMetric"><b>01</b><span>STRUCTURE</span></div><div class="impactMetric"><b>02</b><span>AUTOMATE</span></div><div class="impactMetric"><b>03</b><span>OPTIMIZE</span></div></div></div><div class="card"><div class="code">RUNTIME LOG</div><div class="terminal"><div><span class="p">[INIT]</span> identity_node.sys</div><div><span class="g">[ OK ]</span> network layer</div><div><span class="g">[ OK ]</span> OT integration</div><div><span class="g">[ OK ]</span> data pipeline</div><div><span class="b">[RUN]</span> continuous improvement</div><div class="dim">> waiting for next challenge_</div></div></div></div>
 </div></section>
 
 <section id="erfarenhet"><div class="wrap"><div class="sectionNumber">02</div>
@@ -119,29 +148,29 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;opac
 <section id="arkitektur"><div class="wrap"><div class="sectionNumber">03</div>
  <div class="secHead"><div class="code">03 // SYSTEM ARCHITECTURE</div><h2 class="title">Från maskin till beslut.</h2><p class="sub">En interaktiv översikt över hur du tänker kring IT/OT och dataflöden.</p></div>
  <div class="arch">
-  <div class="node"><span class="num">01 / FIELD</span><b>Machines</b><span>PLC · Sensors · Drives · Production equipment</span></div>
-  <div class="node"><span class="num">02 / OT</span><b>Control</b><span>OPC · SCADA · Ignition · Alarms · Recipes</span></div>
-  <div class="node"><span class="num">03 / DATA</span><b>Integration</b><span>MQTT · Sparkplug · SQL · APIs · UNS</span></div>
-  <div class="node"><span class="num">04 / IT</span><b>Business</b><span>MES · ERP · Power BI · Analytics</span></div>
-  <div class="node"><span class="num">05 / VALUE</span><b>Decisions</b><span>OEE · Quality · Optimization · Continuous improvement</span></div>
+  <div class="node hoverable" data-detail data-type="ARCHITECTURE" data-code="FIELD / 01" data-title="Machines" data-text="Sensorer, PLC:er, drivsystem och produktionsutrustning genererar signaler och processdata." data-tags="PLC|Sensors|Drives"><span class="num">01 / FIELD</span><b>Machines</b><span>PLC · Sensors · Drives · Production equipment</span></div>
+  <div class="node hoverable" data-detail data-type="ARCHITECTURE" data-code="OT / 02" data-title="Control" data-text="SCADA, OPC och operatörsapplikationer ger kontroll, larm, recept och visualisering." data-tags="SCADA|OPC|Ignition"><span class="num">02 / OT</span><b>Control</b><span>OPC · SCADA · Ignition · Alarms · Recipes</span></div>
+  <div class="node hoverable" data-detail data-type="ARCHITECTURE" data-code="DATA / 03" data-title="Integration" data-text="Ett stabilt dataflöde binder ihop OT med IT genom event, topics, APIs och datamodeller." data-tags="MQTT|Sparkplug|APIs|UNS"><span class="num">03 / DATA</span><b>Integration</b><span>MQTT · Sparkplug · SQL · APIs · UNS</span></div>
+  <div class="node hoverable" data-detail data-type="ARCHITECTURE" data-code="IT / 04" data-title="Business" data-text="MES, ERP, SQL och BI gör produktionen mätbar och tillgänglig för verksamheten." data-tags="MES|SQL|ERP|Power BI"><span class="num">04 / IT</span><b>Business</b><span>MES · ERP · Power BI · Analytics</span></div>
+  <div class="node hoverable" data-detail data-type="ARCHITECTURE" data-code="VALUE / 05" data-title="Decisions" data-text="OEE, kvalitet och analys omsätter tekniken till konkreta förbättringar och beslut." data-tags="OEE|Quality|Analytics"><span class="num">05 / VALUE</span><b>Decisions</b><span>OEE · Quality · Optimization · Continuous improvement</span></div>
  </div>
 </div></section>
 
 <section id="projekt"><div class="wrap"><div class="sectionNumber">04</div>
  <div class="secHead"><div class="code">04 // PROJECT LAB</div><h2 class="title">Projekt som visar vad jag kan.</h2><p class="sub">Klicka på ett projekt för att öppna en teknisk case-vy. Byt innehållet till dina riktiga projekt.</p></div>
  <div class="projects">
-  <article class="card project" onclick="openProject('MES / OT Integration','Koppla ihop produktion, maskindata och verksamhet med ett stabilt dataflöde.','OPC · MQTT · Sparkplug · SQL · Ignition','Problem → datainsamling → normalisering → visualisering → verksamhetsnytta.')"><div class="pTop"><span class="pIcon">CASE_001 // MES</span></div><div class="pBody"><h3>MES / OT Integration</h3><p>Maskindata → produktion → insikt.</p><div class="tags"><span class="tag">OT</span><span class="tag">DATA</span></div></div></article>
-  <article class="card project" onclick="openProject('Modern IT Device Management','Centraliserad hantering av Windows, iOS, Android och företagets klientmiljö.','Microsoft Intune · Entra ID · Graph · PowerShell','Standardisering → policy → deployment → compliance → automation.')"><div class="pTop"><span class="pIcon">CASE_002 // IT</span></div><div class="pBody"><h3>Device Management</h3><p>Policy, säkerhet och automation.</p><div class="tags"><span class="tag">INTUNE</span><span class="tag">AUTOMATION</span></div></div></article>
-  <article class="card project" onclick="openProject('Industrial Data Platform','Göra produktionsdata användbar för OEE, analys och beslut.','SQL · MQTT · Sparkplug · Power BI · APIs','Collect → contextualize → store → visualize → optimize.')"><div class="pTop"><span class="pIcon">CASE_003 // DATA</span></div><div class="pBody"><h3>Industrial Data</h3><p>Rådata → beslutskraft.</p><div class="tags"><span class="tag">SQL</span><span class="tag">BI</span></div></div></article>
+  <article class="card project hoverable" data-detail data-type="PROJECT" data-code="CASE / 001" data-title="MES / OT Integration" data-text="Ett tekniskt case där produktionsdata kopplas från maskinnivå till MES och analys." data-tags="MES|OT|OPC|MQTT" onclick="openProject('MES / OT Integration','Koppla ihop produktion, maskindata och verksamhet med ett stabilt dataflöde.','OPC · MQTT · Sparkplug · SQL · Ignition','Problem → datainsamling → normalisering → visualisering → verksamhetsnytta.')"><div class="pTop"><span class="pIcon">CASE_001 // MES</span></div><div class="pBody"><h3>MES / OT Integration</h3><p>Maskindata → produktion → insikt.</p><div class="tags"><span class="tag">OT</span><span class="tag">DATA</span></div></div></article>
+  <article class="card project hoverable" data-detail data-type="PROJECT" data-code="CASE / 002" data-title="Modern IT Device Management" data-text="Centraliserad hantering av klienter, policy och deployment med fokus på säkerhet och skalbarhet." data-tags="Intune|Entra ID|Automation" onclick="openProject('Modern IT Device Management','Centraliserad hantering av Windows, iOS, Android och företagets klientmiljö.','Microsoft Intune · Entra ID · Graph · PowerShell','Standardisering → policy → deployment → compliance → automation.')"><div class="pTop"><span class="pIcon">CASE_002 // IT</span></div><div class="pBody"><h3>Device Management</h3><p>Policy, säkerhet och automation.</p><div class="tags"><span class="tag">INTUNE</span><span class="tag">AUTOMATION</span></div></div></article>
+  <article class="card project hoverable" data-detail data-type="PROJECT" data-code="CASE / 003" data-title="Industrial Data Platform" data-text="Gör produktionsdata tillgänglig för OEE, analys och förbättring genom en tydlig data pipeline." data-tags="SQL|MQTT|BI" onclick="openProject('Industrial Data Platform','Göra produktionsdata användbar för OEE, analys och beslut.','SQL · MQTT · Sparkplug · Power BI · APIs','Collect → contextualize → store → visualize → optimize.')"><div class="pTop"><span class="pIcon">CASE_003 // DATA</span></div><div class="pBody"><h3>Industrial Data</h3><p>Rådata → beslutskraft.</p><div class="tags"><span class="tag">SQL</span><span class="tag">BI</span></div></div></article>
  </div>
 </div></section>
 
 <section id="stack"><div class="wrap"><div class="sectionNumber">05</div>
  <div class="secHead"><div class="code">05 // TECHNOLOGY STACK</div><h2 class="title">Teknisk stack.</h2><p class="sub">Exempel på kompetenser — justera nivåerna efter dig.</p></div>
  <div class="stack">
-  <div class="skill"><b>IT Infrastructure</b><div class="bar"><i style="--w:92%"></i></div></div><div class="skill"><b>Microsoft / Intune</b><div class="bar"><i style="--w:88%"></i></div></div><div class="skill"><b>Networking</b><div class="bar"><i style="--w:90%"></i></div></div>
-  <div class="skill"><b>MES / SCADA</b><div class="bar"><i style="--w:94%"></i></div></div><div class="skill"><b>Ignition / OPC</b><div class="bar"><i style="--w:91%"></i></div></div><div class="skill"><b>SQL / Data</b><div class="bar"><i style="--w:87%"></i></div></div>
-  <div class="skill"><b>PowerShell / Automation</b><div class="bar"><i style="--w:84%"></i></div></div><div class="skill"><b>Power BI / Analytics</b><div class="bar"><i style="--w:82%"></i></div></div><div class="skill"><b>MQTT / Sparkplug / UNS</b><div class="bar"><i style="--w:86%"></i></div></div>
+  <div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 01" data-title="IT Infrastructure" data-text="Core platform layer covering servers, clients, identity, connectivity and operational reliability." data-tags="Infrastructure|Identity|Network"><b>IT Infrastructure</b><div class="bar"><i style="--w:92%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 02" data-title="Microsoft / Intune" data-text="Centralized device management, deployment, compliance and policy for modern endpoints." data-tags="Intune|Entra ID|MDM"><b>Microsoft / Intune</b><div class="bar"><i style="--w:88%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 03" data-title="Networking" data-text="Reliable network foundations connecting users, services and production environments." data-tags="LAN|VLAN|Routing"><b>Networking</b><div class="bar"><i style="--w:90%"></i></div></div>
+  <div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 04" data-title="MES / SCADA" data-text="Production visibility, operator workflows, alarms, recipes and manufacturing execution." data-tags="MES|SCADA|OEE"><b>MES / SCADA</b><div class="bar"><i style="--w:94%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 05" data-title="Ignition / OPC" data-text="Industrial connectivity and visualization between machines, PLCs and higher-level systems." data-tags="Ignition|OPC|SCADA"><b>Ignition / OPC</b><div class="bar"><i style="--w:91%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 06" data-title="SQL / Data" data-text="Structured storage, queries and transformation of operational data into useful information." data-tags="SQL|Data|Integration"><b>SQL / Data</b><div class="bar"><i style="--w:87%"></i></div></div>
+  <div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 07" data-title="PowerShell / Automation" data-text="Repeatable administration, provisioning and automation that reduces manual work." data-tags="PowerShell|Automation|Graph"><b>PowerShell / Automation</b><div class="bar"><i style="--w:84%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 08" data-title="Power BI / Analytics" data-text="Visualizes operational data and turns KPIs into decision support." data-tags="Power BI|KPI|Analytics"><b>Power BI / Analytics</b><div class="bar"><i style="--w:82%"></i></div></div><div class="skill hoverable" data-detail data-type="TECH STACK" data-code="STACK / 09" data-title="MQTT / Sparkplug / UNS" data-text="Event-driven industrial data transport and contextualized information across systems." data-tags="MQTT|Sparkplug|UNS"><b>MQTT / Sparkplug / UNS</b><div class="bar"><i style="--w:86%"></i></div></div>
  </div>
 </div></section>
 
@@ -153,13 +182,34 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;opac
 
 <button class="backTop" id="backTop" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button><footer>© <span id="year"></span> <span id="footerName">Ditt Namn</span> · SYS::ITOT // ENGINEERING PROFILE</footer>
 
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalBox"><div class="mHead"><b id="mTitle">PROJECT</b><button class="close" onclick="closeModal()">×</button></div><div class="mBody"><div class="code">TECHNICAL CASE</div><h2 id="mHead"></h2><p id="mDesc"></p><div class="tags" id="mTags"></div><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p id="mFlow"></p></div></div></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalBox"><div class="mHead"><b id="mTitle">PROJECT</b><button class="close" onclick="closeModal()">×</button></div><div class="mBody"><div class="code">TECHNICAL CASE</div><h2 id="mHead"></h2><p id="mDesc"></p><div class="tags" id="mTags"></div><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><div class="project-flow" id="mFlow"></div></div></div></div>
 
 <div id="cmd"><div class="cmdBox"><input id="cmdInput" class="cmdInput" placeholder="Type a command…"><div class="cmdList">
 <button onclick="go('profil')">→ Open PROFILE</button><button onclick="go('erfarenhet')">→ Open EXPERIENCE</button><button onclick="go('arkitektur')">→ Open ARCHITECTURE</button><button onclick="go('projekt')">→ Open PROJECT LAB</button><button onclick="go('stack')">→ Open TECHNOLOGY STACK</button><button onclick="go('kontakt')">→ Open CONTACT</button></div></div></div>
 <div class="toast" id="toast">CONFIGURATION SAVED</div>
 
 <script>
+const detailLens=document.getElementById("detailLens"),lensType=document.getElementById("lensType"),lensCode=document.getElementById("lensCode"),lensTitle=document.getElementById("lensTitle"),lensText=document.getElementById("lensText"),lensTags=document.getElementById("lensTags"),lensClose=document.getElementById("lensClose");
+let activeDetail=null;
+function showDetail(el,e){
+ activeDetail=el;lensType.textContent=el.dataset.type||"SYSTEM DETAIL";lensCode.textContent=el.dataset.code||"NODE / 00";
+ lensTitle.textContent=el.dataset.title||el.querySelector("h3,b")?.textContent||"Technical detail";lensText.textContent=el.dataset.text||"";
+ lensTags.innerHTML=(el.dataset.tags||"").split("|").filter(Boolean).map(t=>`<span>${t}</span>`).join("");
+ detailLens.classList.add("open");detailLens.setAttribute("aria-hidden","false");positionLens(e);
+}
+function positionLens(e){
+ if(!detailLens.classList.contains("open"))return;
+ const w=detailLens.offsetWidth||370,h=detailLens.offsetHeight||220;let left=e.clientX+20,top=e.clientY+20;
+ if(left+w>innerWidth-12)left=e.clientX-w-20;if(top+h>innerHeight-12)top=e.clientY-h-20;
+ detailLens.style.left=Math.max(10,left)+"px";detailLens.style.top=Math.max(70,top)+"px";
+}
+function hideDetail(){activeDetail=null;detailLens.classList.remove("open");detailLens.setAttribute("aria-hidden","true")}
+document.querySelectorAll("[data-detail]").forEach(el=>{
+ el.addEventListener("mouseenter",e=>showDetail(el,e));el.addEventListener("mousemove",positionLens);el.addEventListener("mouseleave",hideDetail);
+ el.addEventListener("click",e=>{if(innerWidth<=700){e.stopPropagation();if(activeDetail===el&&detailLens.classList.contains("open"))hideDetail();else showDetail(el,e)}});
+});
+lensClose?.addEventListener("click",hideDetail);window.addEventListener("scroll",()=>{if(innerWidth>700)hideDetail()},{passive:true});
+
 const ids=["Name","Headline","Intro","About","Value","Email","Phone","Location","Linkedin"];
 function apply(){
  let p={};try{p=JSON.parse(localStorage.profile||"{}")}catch(e){}
